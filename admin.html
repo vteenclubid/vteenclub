@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<title>Admin — VTEEN.CLUB</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0b0a;--bg2:#141210;--fg:#efe9dd;--mute:#9b9488;--gold:#c8a96a;--line:#2a2622;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:400 1rem/1.6 "Instrument Sans",system-ui,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+.wrap{max-width:980px;margin:0 auto;padding:1.2rem}
+h1{font:600 1.6rem "Cormorant Garamond",serif;letter-spacing:.18em;margin:0}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.tabs{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.btn,.tabs button{border:1px solid var(--gold);background:var(--gold);color:#17120a;border-radius:999px;padding:.55rem 1.2rem;font:600 .9rem "Instrument Sans",sans-serif;cursor:pointer}
+.btn.alt,.tabs button{background:none;color:var(--gold)}.tabs button[aria-pressed="true"]{background:var(--gold);color:#17120a}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:1rem;margin-bottom:.9rem}
+.r{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.4rem 0}
+input,select{background:#0f0d0c;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:.55rem .7rem;font:inherit;min-width:0;flex:1 1 140px}
+input[type=checkbox]{flex:0 0 auto;min-width:0}input:focus,select:focus{outline:2px solid var(--gold)}
+table{border-collapse:collapse;margin:.5rem 0}td,th{padding:.2rem .4rem;font-size:.9rem;text-align:left}td input{width:70px;flex:none}
+.m{color:var(--mute);font-size:.88rem}.err{color:#ff7a88;min-height:1.5em}
+.st{display:inline-block;padding:.1rem .6rem;border-radius:999px;border:1px solid var(--line);font-size:.8rem}
+[hidden]{display:none!important}
+</style></head><body><div class="wrap">
+<div class="top"><h1>VTEEN · ADMIN</h1><button class="btn alt" id="out" hidden>Keluar</button></div>
+<form id="login" class="card" style="max-width:380px"><b>Masuk admin</b>
+<div class="r"><input id="em" type="email" placeholder="Email" autocomplete="username" required></div>
+<div class="r"><input id="pw" type="password" placeholder="Password" autocomplete="current-password" required></div>
+<p class="err" id="lerr"></p><button class="btn" type="submit">Masuk</button></form>
+<div id="app" hidden><div class="tabs"><button data-t="col">Koleksi</button><button data-t="prod">Baju &amp; stok</button><button data-t="ord">Pesanan</button></div><div id="view"></div></div>
+</div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getFirestore,collection,doc,query,orderBy,limit,onSnapshot,addDoc,setDoc,getDoc,deleteDoc,updateDoc,serverTimestamp,runTransaction} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+const app=initializeApp({apiKey:"AIzaSyA8JvH2ix_2bLOKyM0BysGmmQpwtk7XQ0Q",authDomain:"vteenclub-c95de.firebaseapp.com",projectId:"vteenclub-c95de",storageBucket:"vteenclub-c95de.firebasestorage.app",messagingSenderId:"1076072253177",appId:"1:1076072253177:web:d1bb9f3af1e29fd0170428"}),db=getFirestore(app),auth=getAuth(app);
+const $=i=>document.getElementById(i),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SZ=["S","M","L","XL"],ST={draft:"Draft (tersembunyi)",segera:"Segera",rilis:"Rilis"};
+const DEF="Krem:#efe7d6:#8e1b26, Hitam:#1c1a18:#c8a96a, Merah:#a3212d:#efe9dd";
+let CS=[],PS=[],OS=[],tab="col",filt="",started=false;
+const sel=(o,v)=>Object.entries(o).map(([k,t])=>`<option value="${k}"${k===v?" selected":""}>${t}</option>`).join("");
+const parseCols=t=>t.split(",").map(x=>x.trim()).filter(Boolean).map(x=>{const[a,b,c]=x.split(":");return{name:a.trim(),hex:(b||"#cccccc").trim(),fg:(c||"#ffffff").trim()}});
+$("login").onsubmit=async e=>{e.preventDefault();$("lerr").textContent="";try{await signInWithEmailAndPassword(auth,$("em").value,$("pw").value)}catch{$("lerr").textContent="Email atau password salah."}};
+$("out").onclick=()=>signOut(auth);
+onAuthStateChanged(auth,async u=>{
+  $("login").hidden=!!u;$("out").hidden=!u;if(!u){$("app").hidden=true;return}
+  const a=await getDoc(doc(db,"admins",u.uid));
+  if(!a.exists()){$("lerr").textContent="Akun ini belum jadi admin. Buat dokumen admins/"+u.uid+" di Firestore.";$("login").hidden=false;await signOut(auth);return}
+  $("app").hidden=false;if(started)return;started=true;
+  onSnapshot(query(collection(db,"collections"),orderBy("order")),s=>{CS=s.docs.map(d=>({id:d.id,...d.data()}));touch("c")});
+  onSnapshot(collection(db,"products"),s=>{PS=s.docs.map(d=>({id:d.id,...d.data()}));touch("p")});
+  onSnapshot(query(collection(db,"orders"),orderBy("createdAt","desc"),limit(100)),s=>{OS=s.docs.map(d=>({id:d.id,...d.data()}));touch("o")});
+});
+function touch(w){if((tab==="col"&&w==="c")||(tab==="prod"&&w!=="o")||(tab==="ord"&&w==="o"))render()}
+function render(){
+  $("view").innerHTML=tab==="col"?colView():tab==="prod"?prodView():ordView();
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.t===tab))}
+document.querySelector(".tabs").onclick=e=>{const b=e.target.closest("[data-t]");if(b){tab=b.dataset.t;render()}};
+function colView(){return `<div class="card"><b>Tambah koleksi</b><div class="r"><input id="nt" placeholder="Judul, contoh: Vol.3"><select id="ns">${sel(ST,"draft")}</select><input id="no" type="number" value="${CS.length+1}" aria-label="Urutan"><button class="btn" data-a="addc">Tambah</button></div><p class="m">Draft = tersembunyi dari pembeli. Segera = tampil dengan tombol "Kabari saya". Rilis = bisa dipesan.</p></div>`
+ +CS.map(c=>`<div class="card" data-id="${c.id}"><div class="r"><input data-f="title" value="${esc(c.title)}"><select data-f="status">${sel(ST,c.status)}</select><input data-f="order" type="number" value="${c.order||0}" aria-label="Urutan"><button class="btn" data-a="savec">Simpan</button></div></div>`).join("")
+ +(CS.length?"":`<div class="card">Belum ada data. <button class="btn" data-a="seed">Isi data awal Vol.1</button></div>`)}
+function prodView(){const L=PS.filter(p=>!filt||p.collectionId===filt);
+ return `<div class="r"><select id="fl"><option value="">Semua koleksi</option>${CS.map(c=>`<option value="${c.id}"${c.id===filt?" selected":""}>${esc(c.title)}</option>`).join("")}</select><button class="btn" data-a="addp">Tambah baju</button></div>`
+ +L.map(p=>{const cols=p.colors||[];return `<div class="card" data-id="${p.id}"><div class="r"><input data-f="name" value="${esc(p.name)}" placeholder="Nama baju"><input data-f="price" type="number" min="0" value="${p.price||0}" placeholder="Harga (Rp)"><select data-f="collectionId">${CS.map(c=>`<option value="${c.id}"${c.id===p.collectionId?" selected":""}>${esc(c.title)}</option>`).join("")}</select><label><input type="checkbox" data-f="active"${p.active?" checked":""}> Tampil</label></div>
+<div class="r"><input data-f="front" value="${esc(p.front)}" placeholder="Teks depan"><input data-f="back" value="${esc((p.back||[]).join(", "))}" placeholder="Teks belakang (pisah koma)"></div>
+<div class="r"><input data-f="colors" value="${esc(cols.map(c=>c.name+":"+c.hex+":"+c.fg).join(", "))}" placeholder="Nama:#warna:#warnaTeks, ..."></div>
+<table><tr><th>Stok</th>${SZ.map(s=>`<th>${s}</th>`).join("")}</tr>${cols.map(c=>`<tr><td>${esc(c.name)}</td>${SZ.map(s=>`<td><input class="st" type="number" min="0" data-k="${esc(c.name)}|${s}" value="${(p.stock||{})[c.name+"|"+s]||0}"></td>`).join("")}</tr>`).join("")}</table>
+<p class="m">Ubah daftar warna lalu Simpan; kolom stok untuk warna baru muncul setelah disimpan.</p>
+<div class="r"><button class="btn" data-a="savep">Simpan</button><button class="btn alt" data-a="delp">Hapus</button></div></div>`}).join("")||`<p class="m">Belum ada baju.</p>`}
+function ordView(){return OS.map(o=>`<div class="card" data-id="${o.id}"><div class="r"><b>${esc(o.name||"(tanpa nama)")}</b><span class="st">${esc(o.status)}</span><span class="m">${o.createdAt?o.createdAt.toDate().toLocaleString("id-ID"):""}</span></div><div>${esc(o.collectionTitle)} · ${esc(o.productName)} · ${esc(o.color)} · ${esc(o.size)} · ${o.qty} pcs</div>${o.status==="baru"?`<div class="r"><button class="btn" data-a="ok">Konfirmasi &amp; kurangi stok</button><button class="btn alt" data-a="no">Batalkan</button></div>`:""}</div>`).join("")||`<p class="m">Belum ada pesanan.</p>`}
+const F=card=>{const o={};card.querySelectorAll("[data-f]").forEach(i=>o[i.dataset.f]=i.type==="checkbox"?i.checked:i.value);return o};
+$("view").addEventListener("change",e=>{if(e.target.id==="fl"){filt=e.target.value;render()}});
+$("view").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-a]");if(!b)return;const a=b.dataset.a,card=b.closest("[data-id]"),id=card&&card.dataset.id;b.disabled=true;
+  try{
+    if(a==="addc"){const t=$("nt").value.trim();if(t)await addDoc(collection(db,"collections"),{title:t,status:$("ns").value,order:+$("no").value||0})}
+    else if(a==="savec"){const f=F(card);await updateDoc(doc(db,"collections",id),{title:f.title.trim(),status:f.status,order:+f.order||0})}
+    else if(a==="seed"){const r=await addDoc(collection(db,"collections"),{title:"Vol.1",status:"rilis",order:1});
+      await addDoc(collection(db,"products"),{collectionId:r.id,name:"Kaos Enjoy Your Run",price:0,front:"VTEEN",back:["Enjoy","Your","Run"],colors:parseCols(DEF),stock:{},active:true})}
+    else if(a==="addp"){const c=filt||(CS[0]&&CS[0].id);if(!c){alert("Buat koleksi dulu.");return}
+      await addDoc(collection(db,"products"),{collectionId:c,name:"Kaos baru",price:0,front:"VTEEN",back:["Enjoy","Your","Run"],colors:parseCols(DEF),stock:{},active:false})}
+    else if(a==="savep"){const f=F(card),stock={};card.querySelectorAll(".st").forEach(i=>stock[i.dataset.k]=Math.max(0,parseInt(i.value)||0));
+      await setDoc(doc(db,"products",id),{collectionId:f.collectionId,name:f.name.trim(),price:Math.max(0,+f.price||0),front:f.front.trim(),back:f.back.split(",").map(x=>x.trim()).filter(Boolean),colors:parseCols(f.colors),stock,active:f.active})}
+    else if(a==="delp"){if(confirm("Hapus baju ini?"))await deleteDoc(doc(db,"products",id))}
+    else if(a==="no")await updateDoc(doc(db,"orders",id),{status:"batal"});
+    else if(a==="ok"){const o=OS.find(x=>x.id===id),k=o.color+"|"+o.size;
+      await runTransaction(db,async t=>{const pr=doc(db,"products",o.productId),ps=await t.get(pr);if(!ps.exists())throw new Error("Baju sudah dihapus.");
+        const have=+((ps.data().stock||{})[k])||0;if(have<o.qty)throw new Error("Stok tidak cukup (sisa "+have+").");
+        t.update(pr,{["stock."+k]:have-o.qty});t.update(doc(db,"orders",id),{status:"konfirmasi"})})}
+  }catch(err){alert("Gagal: "+(err.message||err.code))}
+  b.disabled=false});
+</script></body></html>
