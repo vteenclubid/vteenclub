@@ -1,1 +1,329 @@
-
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VTEEN.CLUB — Enjoy Your Run</title>
+<meta name="description" content="VTEEN.CLUB: komunitas lari dan apparel. Koleksi Vol.1.">
+<meta name="theme-color" content="#0c0b0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0b0a;--bg2:#141210;--fg:#efe9dd;--mute:#9b9488;--gold:#c8a96a;--red:#a3212d;--line:#2a2622;--mx:50%;--my:30%;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 1rem/1.7 "Instrument Sans",system-ui,sans-serif;padding-bottom:env(safe-area-inset-bottom,0px);overflow-x:hidden}
+a{color:inherit}:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 1.25rem;position:relative}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.07;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+#glow{position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(520px circle at var(--mx) var(--my),rgba(200,169,106,.13),transparent 60%)}
+#load{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;transition:opacity .9s .2s,visibility 0s 1.1s}
+#load div{text-align:center;font:600 clamp(2.4rem,9vw,4.5rem)/1 "Cormorant Garamond",serif;letter-spacing:.18em}
+#load i{display:block;height:1px;margin:1rem auto 0;width:0;background:var(--gold);animation:ln 1.3s ease forwards}
+@keyframes ln{to{width:100%}}
+#load.done{opacity:0;visibility:hidden}
+header{position:fixed;top:0;left:0;right:0;z-index:30;padding-top:env(safe-area-inset-top,0px);transition:background .4s}
+header.solid{background:rgba(12,11,10,.8);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font:600 1.5rem/1 "Cormorant Garamond",serif;letter-spacing:.22em;text-decoration:none}
+nav{display:flex;gap:1.8rem;align-items:center;font-size:.9rem}
+nav a{text-decoration:none;color:var(--mute);transition:color .3s}nav a:hover{color:var(--gold)}
+.btn{display:inline-block;padding:.9rem 1.8rem;border-radius:999px;border:1px solid var(--gold);background:var(--gold);color:#17120a;font:600 .95rem "Instrument Sans",sans-serif;text-decoration:none;cursor:pointer;transition:background .3s,color .3s,box-shadow .3s;will-change:transform}
+.btn:hover{box-shadow:0 0 36px rgba(200,169,106,.45)}
+.btn.alt{background:transparent;color:var(--gold)}.btn.alt:hover{background:var(--gold);color:#17120a}
+.cta{display:flex;gap:.8rem;flex-wrap:wrap}
+.hero{min-height:100svh;display:grid;align-items:center;position:relative;overflow:hidden;padding:7rem 0 4rem}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;animation:drift 18s ease-in-out infinite alternate}
+.o1{width:420px;height:420px;background:var(--red);top:-80px;right:-100px}
+.o2{width:340px;height:340px;background:var(--gold);bottom:-100px;left:-80px;opacity:.18;animation-duration:24s}
+@keyframes drift{to{transform:translate(-70px,60px) scale(1.2)}}
+.track{position:absolute;right:-12%;top:50%;width:min(95vw,860px);transform:translateY(-50%);opacity:.95;pointer-events:none}
+.eyebrow{color:var(--gold);letter-spacing:.35em;font-size:.78rem;margin:0 0 1.2rem}
+h1{font:500 clamp(3.6rem,15vw,10.5rem)/.9 "Cormorant Garamond",serif;margin:0 0 1.6rem;letter-spacing:-.02em}
+h1 em{color:var(--gold);font-style:italic}
+.ch{display:inline-block;opacity:0;transform:translateY(60%) rotate(4deg);transition:opacity 1s,transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.go .ch{opacity:1;transform:none}
+.sub{max-width:36ch;color:var(--mute);font-size:1.15rem;margin:0 0 2rem}
+.ticker{border-block:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:.9rem 0;position:relative;z-index:2;background:var(--bg)}
+.ticker div{display:inline-block;animation:tick 40s linear infinite;font:italic 500 1.7rem "Cormorant Garamond",serif;color:var(--gold)}
+.ticker span{margin:0 1.6rem}.ticker span:nth-child(even){color:var(--mute);font-style:normal}
+@keyframes tick{to{transform:translateX(-50%)}}
+section{padding:6rem 0;position:relative;z-index:2}
+h2{font:500 clamp(2.6rem,8vw,5.2rem)/1 "Cormorant Garamond",serif;margin:0 0 1rem}
+h2 em{color:var(--gold)}
+.lead{color:var(--mute);max-width:50ch;margin:0 0 2.5rem}
+.rv{opacity:0;transform:translateY(28px);transition:opacity 1s,transform 1s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.panel{background:linear-gradient(160deg,var(--bg2),#0f0d0c);border:1px solid var(--line);border-radius:22px;padding:1.6rem;position:relative;overflow:hidden}
+.panel::before{content:"";position:absolute;inset:0;background:radial-gradient(320px circle at var(--px,50%) var(--py,0%),rgba(200,169,106,.12),transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
+.panel:hover::before{opacity:1}
+.shop,.tools{display:grid;grid-template-columns:1.1fr 1fr;gap:1.5rem;align-items:start}
+.tools{grid-template-columns:1fr 1fr}
+.stage{perspective:1000px;display:grid;place-items:center;min-height:360px;cursor:grab;touch-action:pan-y;user-select:none;position:relative}
+.stage:active{cursor:grabbing}
+.stage::after{content:"";position:absolute;bottom:28px;width:55%;height:24px;background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);filter:blur(6px)}
+.float{animation:fl 6s ease-in-out infinite;width:min(100%,400px);position:relative;z-index:1}
+@keyframes fl{50%{transform:translateY(-14px)}}
+.tilt{transition:transform .15s;transform-style:preserve-3d}
+.tee3d{position:relative;aspect-ratio:200/190;transform-style:preserve-3d}
+.tee3d svg{position:absolute;inset:0;width:100%;height:100%;backface-visibility:hidden;filter:drop-shadow(0 26px 24px rgba(0,0,0,.55))}
+.tee3d svg+svg{transform:rotateY(180deg)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;color:var(--mute);padding:.45rem 1.1rem;border-radius:999px;cursor:pointer;font:500 .88rem "Instrument Sans",sans-serif}
+.seg button[aria-pressed="true"]{background:var(--gold);color:#17120a}
+.dragnote{color:var(--mute);font-size:.82rem;margin:.6rem 0 0}
+label,.lbl{display:block;font-size:.8rem;letter-spacing:.14em;color:var(--mute);margin:1.2rem 0 .45rem}
+.sw{display:flex;gap:.7rem}
+.sw button{width:42px;height:42px;border-radius:50%;border:2px solid var(--line);cursor:pointer;transition:transform .25s,box-shadow .25s}
+.sw button[aria-pressed="true"]{transform:scale(1.1);border-color:var(--gold);box-shadow:0 0 0 3px #0f0d0c,0 0 0 4px var(--gold)}
+.sizes{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
+.sizes button{padding:.75rem 0;font:600 1.5rem "Cormorant Garamond",serif;background:none;color:var(--fg);border:1px solid var(--line);border-radius:12px;cursor:pointer;transition:.3s}
+.sizes button:hover{border-color:var(--gold)}
+.sizes button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#17120a}
+.dims,.res{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+.dims div,.res div{border-top:1px solid var(--gold);padding-top:.5rem}
+.dims strong,.res strong{display:block;font:500 2.8rem/1 "Cormorant Garamond",serif;font-variant-numeric:tabular-nums}
+.dims small,.res small{color:var(--mute)}
+input{width:100%;background:transparent;color:var(--fg);border:0;border-bottom:1px solid var(--line);padding:.7rem .1rem;font:500 1rem "Instrument Sans",sans-serif;border-radius:0;transition:border-color .3s}
+input:focus{border-color:var(--gold);outline:0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+.chips button{border:1px solid var(--line);background:none;color:var(--fg);padding:.4rem .95rem;border-radius:999px;cursor:pointer;font:500 .88rem "Instrument Sans",sans-serif;transition:.25s}
+.chips button:hover{border-color:var(--gold)}.chips button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#17120a}
+.qty{display:flex;align-items:center;gap:1rem}
+.qty button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--fg);font-size:1.2rem;cursor:pointer}
+.qty button:hover{border-color:var(--gold)}
+.qty output{font:500 1.8rem "Cormorant Garamond",serif;min-width:2ch;text-align:center}
+.note{font-size:.85rem;color:var(--mute);margin:.7rem 0 0}
+.hint{color:var(--gold);min-height:1.7em;margin:.4rem 0 0;font-size:.95rem}
+.join{text-align:center;border-top:1px solid var(--line);overflow:hidden}
+.join h2{font-size:clamp(3.2rem,13vw,9rem);line-height:.92}
+.join .lead{margin-inline:auto}.join .cta{justify-content:center}
+footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--mute);font-size:.88rem;position:relative;z-index:2}
+footer .wrap{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between}
+footer a{margin-right:1.2rem}
+@media (max-width:780px){.shop,.tools{grid-template-columns:1fr}nav a{display:none}.track{opacity:.5;right:-40%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.ch,.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
+<noscript><style>#load{display:none}.ch,.rv{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+<div id="glow" aria-hidden="true"></div>
+<div id="load" aria-hidden="true"><div>VTEEN<i></i></div></div>
+<header id="hd"><div class="wrap">
+  <a class="logo" href="#top">VTEEN</a>
+  <nav><a href="#koleksi">Koleksi</a><a href="#pace">Alat lari</a><a href="#gabung">Komunitas</a><a class="btn mag" href="#koleksi" style="color:#17120a;padding:.55rem 1.3rem">Pesan</a></nav>
+</div></header>
+<main id="top">
+  <div class="hero" id="hero">
+    <div class="orb o1"></div><div class="orb o2"></div>
+    <svg class="track" viewBox="0 0 800 480" aria-hidden="true">
+      <defs><filter id="gl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs>
+      <path id="lane" d="M240 60 H560 A180 180 0 0 1 560 420 H240 A180 180 0 0 1 240 60Z" fill="none" stroke="rgba(200,169,106,.34)" stroke-width="1.4"/>
+      <path d="M240 100 H560 A140 140 0 0 1 560 380 H240 A140 140 0 0 1 240 100Z" fill="none" stroke="rgba(200,169,106,.2)" stroke-width="1"/>
+      <path d="M240 140 H560 A100 100 0 0 1 560 340 H240 A100 100 0 0 1 240 140Z" fill="none" stroke="rgba(200,169,106,.12)" stroke-width="1"/>
+      <circle r="16" fill="#d7263d" opacity=".55" filter="url(#gl)"><animateMotion dur="14s" repeatCount="indefinite"><mpath href="#lane"/></animateMotion></circle>
+      <circle r="6" fill="#ff4d62"><animateMotion dur="14s" repeatCount="indefinite"><mpath href="#lane"/></animateMotion></circle>
+      <circle r="4" fill="#c8a96a"><animateMotion dur="19s" begin="-6s" repeatCount="indefinite"><mpath href="#lane"/></animateMotion></circle>
+    </svg>
+    <div class="wrap">
+      <p class="eyebrow">KOMUNITAS LARI &amp; APPAREL — VOL.1</p>
+      <h1 id="h1" aria-label="Enjoy Your Run.">Enjoy<br><em>Your Run.</em></h1>
+      <p class="sub">Kaos lari yang dibuat untuk pelari yang menikmati setiap langkahnya, apa pun pace-nya.</p>
+      <div class="cta"><a class="btn mag" href="#koleksi">Lihat koleksi</a><a class="btn alt mag" href="#pace">Hitung pace</a></div>
+    </div>
+  </div>
+  <div class="ticker" aria-hidden="true"><div id="tick"></div></div>
+ 
+  <section id="koleksi"><div class="wrap">
+    <h2 class="rv">Koleksi <em id="vn">Vol.1</em></h2>
+    <p class="lead rv">Seret kaos untuk memutarnya, pilih warna dan ukuran, lalu pesan langsung.</p>
+    <div class="seg" id="vols" role="group" aria-label="Pilih koleksi" style="margin:-1rem 0 1.5rem"></div>
+    <div class="chips" id="prods" role="group" aria-label="Pilih baju" style="margin:-.5rem 0 1.5rem"></div>
+    <div class="shop rv">
+      <div class="panel" style="text-align:center">
+        <div class="stage" id="stage"><div class="float"><div class="tilt" id="tilt"><div class="tee3d" id="tee"></div></div></div></div>
+        <div class="seg" role="group" aria-label="Sisi kaos"><button aria-pressed="true" data-side="0">Depan</button><button aria-pressed="false" data-side="1">Belakang</button></div>
+        <p class="dragnote">Seret ke kiri atau kanan untuk memutar</p>
+        <!-- Ganti SVG kaos dengan foto produk asli jika sudah ada -->
+      </div>
+      <div class="panel">
+        <span class="lbl" style="margin-top:0">WARNA: <b id="cn" style="color:var(--fg)">Krem</b></span>
+        <div class="sw" id="sw" role="group" aria-label="Pilih warna"></div>
+        <span class="lbl">UKURAN</span>
+        <div class="sizes" id="sizes" role="group" aria-label="Pilih ukuran"><button aria-pressed="false">S</button><button aria-pressed="true">M</button><button aria-pressed="false">L</button><button aria-pressed="false">XL</button></div>
+        <div class="dims" aria-live="polite"><div><strong id="len">71</strong><small>Panjang (cm)</small></div><div><strong id="wid">52</strong><small>Lebar (cm)</small></div></div>
+        <label for="mine">LEBAR KAOS FAVORITMU (CM)</label>
+        <input id="mine" type="number" inputmode="decimal" min="40" max="70" placeholder="Contoh: 53">
+        <label for="tb">ATAU ISI TINGGI DAN BERAT BADAN</label>
+        <div class="row2"><input id="tb" type="number" inputmode="numeric" placeholder="Tinggi (cm)" aria-label="Tinggi badan"><input id="bb" type="number" inputmode="numeric" placeholder="Berat (kg)" aria-label="Berat badan"></div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+        <p class="hint" id="price"></p>
+        <span class="lbl">JUMLAH</span>
+        <div class="qty"><button id="minus" aria-label="Kurangi">−</button><output id="qty">1</output><button id="plus" aria-label="Tambah">+</button></div>
+        <label for="name">NAMA</label>
+        <input id="name" type="text" autocomplete="name" placeholder="Nama kamu">
+        <div class="cta" style="margin-top:1.5rem"><button class="btn mag" id="order">Pesan via WhatsApp</button></div>
+        <p class="note" id="orderNote">Pesan siap kirim akan dibuat otomatis. Harga dan pembayaran dikonfirmasi admin.</p>
+      </div>
+    </div>
+  </div></section>
+ 
+  <section id="pace" style="padding-top:1rem"><div class="wrap">
+    <h2 class="rv">Alat <em>lari</em></h2>
+    <p class="lead rv">Masukkan jarak dan waktumu. Pace dan prediksi jarak lain dihitung langsung.</p>
+    <div class="tools rv">
+      <div class="panel">
+        <span class="lbl" style="margin-top:0">JARAK CEPAT</span>
+        <div class="chips" id="dc" role="group" aria-label="Jarak cepat"></div>
+        <label for="km" style="margin-top:.6rem">JARAK (KM)</label>
+        <input id="km" type="number" inputmode="decimal" min="0.1" step="0.01" value="5">
+        <span class="lbl">WAKTU</span>
+        <div class="row3"><input id="h" type="number" inputmode="numeric" min="0" aria-label="Jam" placeholder="jam" value="0"><input id="m" type="number" inputmode="numeric" min="0" aria-label="Menit" placeholder="menit" value="30"><input id="s" type="number" inputmode="numeric" min="0" max="59" aria-label="Detik" placeholder="detik" value="0"></div>
+        <div class="res" aria-live="polite"><div><strong id="pace">6:00</strong><small>Pace (menit/km)</small></div><div><strong id="spd">10.0</strong><small>Kecepatan (km/jam)</small></div></div>
+      </div>
+      <div class="panel">
+        <span class="lbl" style="margin-top:0">PREDIKSI WAKTU</span>
+        <div class="res"><div><strong id="p5">–</strong><small>5K</small></div><div><strong id="p10">–</strong><small>10K</small></div><div><strong id="p21">–</strong><small>Half marathon</small></div><div><strong id="p42">–</strong><small>Marathon</small></div></div>
+        <p class="note">Perkiraan dengan rumus Riegel. Hasil asli bergantung latihan dan medan.</p>
+      </div>
+    </div>
+  </div></section>
+ 
+  <section class="join" id="gabung"><div class="wrap">
+    <h2 class="rv">Lari bareng <em>VTEEN</em></h2>
+    <p class="lead rv">Kabar lari, rilis koleksi, dan pemesanan ada di Instagram.</p>
+    <div class="cta rv"><a class="btn mag" href="https://instagram.com/vteenclub" target="_blank" rel="noopener">Ikuti @vteenclub</a><a class="btn alt mag" href="https://linktr.ee/vteenclub" target="_blank" rel="noopener">Semua tautan</a></div>
+  </div></section>
+</main>
+<footer><div class="wrap"><span>© 2026 VTEEN.CLUB</span><span><a href="https://instagram.com/vteenclub" target="_blank" rel="noopener">@vteenclub</a><a href="https://linktr.ee/vteenclub" target="_blank" rel="noopener">linktr.ee/vteenclub</a></span></div></footer>
+ 
+<script>setTimeout(function(){document.getElementById("load").classList.add("done");document.getElementById("h1").classList.add("go")},4500)</script>
+<script type="module">
+/* Firebase dimuat aman: kalau gagal, halaman tetap terbuka */
+let db=null,fs={};
+try{const lim=new Promise((_,j)=>setTimeout(j,6000));
+  const [a,f]=await Promise.race([Promise.all([import("https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"),import("https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js")]),lim]);
+  fs=f;db=f.getFirestore(a.initializeApp({apiKey:"AIzaSyA8JvH2ix_2bLOKyM0BysGmmQpwtk7XQ0Q",authDomain:"vteenclub-c95de.firebaseapp.com",projectId:"vteenclub-c95de",storageBucket:"vteenclub-c95de.firebasestorage.app",messagingSenderId:"1076072253177",appId:"1:1076072253177:web:d1bb9f3af1e29fd0170428"}))}catch(e){console.warn("Firebase gagal dimuat",e)}
+const {collection,query,where,onSnapshot,addDoc,serverTimestamp}=fs;
+/* ===== PENGATURAN ===== */
+const CONFIG={wa:"",ig:"https://ig.me/m/vteenclub"}; // wa: 628xxxxxxxxxx (kosong = salin pesan + buka DM Instagram)
+/* ====================== */
+const $=id=>document.getElementById(id);
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fine=matchMedia("(pointer:fine)").matches;
+ 
+/* pecah huruf judul */
+const h1=$("h1");let n=0;
+(function split(node){[...node.childNodes].forEach(c=>{
+  if(c.nodeType===3){const f=document.createDocumentFragment();[...c.textContent].forEach(ch=>{const s=document.createElement("span");s.className="ch";s.textContent=ch;s.style.transitionDelay=(.9+n++*.05)+"s";f.appendChild(s)});c.replaceWith(f)}
+  else if(c.nodeName!=="BR")split(c)})})(h1);
+addEventListener("load",()=>setTimeout(()=>{$("load").classList.add("done");document.body.classList.add("go");h1.classList.add("go")},reduce?0:1500));
+setTimeout(()=>{$("load").classList.add("done");h1.classList.add("go")},4000);
+$("tick").innerHTML=("<span>Enjoy Your Run</span><span>✦</span><span>Vol.1</span><span>✦</span><span>VTEEN.CLUB</span><span>✦</span>").repeat(8);
+addEventListener("scroll",()=>$("hd").classList.toggle("solid",scrollY>40),{passive:true});
+if(fine){
+  addEventListener("pointermove",e=>{document.documentElement.style.setProperty("--mx",e.clientX+"px");document.documentElement.style.setProperty("--my",e.clientY+"px")});
+  document.querySelectorAll(".panel").forEach(p=>p.addEventListener("pointermove",e=>{const r=p.getBoundingClientRect();p.style.setProperty("--px",e.clientX-r.left+"px");p.style.setProperty("--py",e.clientY-r.top+"px")}));
+  document.querySelectorAll(".mag").forEach(b=>{
+    b.addEventListener("pointermove",e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.35}px)`});
+    b.addEventListener("pointerleave",()=>b.style.transform="");
+  });
+}
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll(".rv").forEach(el=>io.observe(el));
+ 
+/* ===== KAOS: gambar detail + putar dengan seret ===== */
+let COL=[["Krem","#efe7d6","#8e1b26","#1a1713"],["Hitam","#1c1a18","#c8a96a","#efe9dd"],["Merah","#a3212d","#efe9dd","#efe9dd"]];
+let P=null,CUR=null,CS=[],PS=[],unsubP=null,ci=0,rot=0,target=0,vel=0,drag=false,lx=0;
+function tee(side,c){
+  const T={f:P?P.front:"VTEEN",b:P?P.back:["Enjoy","Your","Run"]};const u="u"+side,bp=side?"M62 12L8 44L27 78L50 67V178H150V67L173 78L192 44L138 12Q100 22 62 12Z":"M62 12L8 44L27 78L50 67V178H150V67L173 78L192 44L138 12Q100 40 62 12Z";
+  const art=side
+    ?`<g font-family="Cormorant Garamond,serif" font-weight="600" font-style="italic" fill="${c[2]}" text-anchor="middle" font-size="25">${T.b.map((w,i)=>`<text x="100" y="${84+i*26}">${w}</text>`).join("")}</g>`
+    :`<text x="100" y="92" text-anchor="middle" font-family="Cormorant Garamond,serif" font-weight="600" font-size="26" letter-spacing="4" fill="${c[2]}">${T.f}</text>`;
+  return `<svg viewBox="0 0 200 190" role="img" aria-label="Kaos VTEEN tampak ${side?"belakang":"depan"}"><defs><clipPath id="c${u}"><path d="${bp}"/></clipPath>
+<linearGradient id="g${u}" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset=".28" stop-color="#fff" stop-opacity=".07"/><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></linearGradient>
+<linearGradient id="v${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient></defs>
+<path d="${bp}" fill="${c[1]}"/>
+<g clip-path="url(#c${u})"><rect width="200" height="190" fill="url(#g${u})"/><rect width="200" height="190" fill="url(#v${u})"/>
+<g fill="none" stroke="#000" stroke-opacity=".16" stroke-width="2.4" stroke-linecap="round"><path d="M62 72Q74 122 66 176"/><path d="M138 74Q128 124 136 176"/><path d="M96 122Q108 152 100 178"/></g>
+<g stroke="${c[3]}" stroke-opacity=".3" stroke-dasharray="3 3" fill="none"><path d="M50 166H150"/><path d="M27 70L50 59M173 70L150 59"/></g></g>
+${art}<path d="${bp}" fill="none" stroke="#000" stroke-opacity=".6" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M62 12Q100 ${side?22:40} 138 12" fill="none" stroke="${c[3]}" stroke-opacity=".5" stroke-width="3"/></svg>`}
+function draw(){$("tee").innerHTML=tee(0,COL[ci])+tee(1,COL[ci]);$("cn").textContent=COL[ci][0];[...$("sw").children].forEach((b,i)=>b.setAttribute("aria-pressed",i===ci))}
+function swatches(){$("sw").innerHTML="";COL.forEach((c,i)=>{const b=document.createElement("button");b.style.background=c[1];b.setAttribute("aria-label","Warna "+c[0]);b.onclick=()=>{ci=i;draw();refresh()};$("sw").appendChild(b)})}
+swatches();draw();
+const seg=document.querySelectorAll(".seg button");
+function side(s){target=s*180+Math.round(rot/360)*360;seg.forEach(x=>x.setAttribute("aria-pressed",+x.dataset.side===s))}
+seg.forEach(b=>b.onclick=()=>side(+b.dataset.side));
+const st=$("stage"),tl=$("tilt");
+st.addEventListener("pointerdown",e=>{drag=true;lx=e.clientX;vel=0;st.setPointerCapture(e.pointerId)});
+st.addEventListener("pointermove",e=>{
+  if(drag){const d=(e.clientX-lx)*.6;lx=e.clientX;rot+=d;vel=d;return}
+  if(!reduce&&e.pointerType==="mouse"){const r=st.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;tl.style.transform=`rotateX(${-y*18}deg) rotateY(${x*14}deg)`}});
+st.addEventListener("pointerleave",()=>tl.style.transform="");
+["pointerup","pointercancel"].forEach(v=>st.addEventListener(v,()=>{if(!drag)return;drag=false;target=Math.round((rot+vel*8)/180)*180;side(((target/180)%2+2)%2)}));
+(function loop(){if(!drag)rot+=(target-rot)*(reduce?1:.12);$("tee").style.transform=`rotateY(${rot}deg)`;requestAnimationFrame(loop)})();
+ 
+/* ===== data dari Firestore ===== */
+const stock=()=>CUR&&CUR.status==="segera"?99:(P&&+((P.stock||{})[COL[ci][0]+"|"+size])||0);
+const maxq=()=>Math.max(1,Math.min(20,stock()));
+function refresh(){
+  const soon=CUR&&CUR.status==="segera",out=!soon&&!!P&&stock()<=0;
+  sB.forEach(b=>{const n=soon?1:(P&&+((P.stock||{})[COL[ci][0]+"|"+b.textContent])||0);b.style.opacity=n>0?"":".35";b.title=n>0?"":"Stok habis"});
+  qty=Math.min(qty,maxq());$("qty").textContent=qty;
+  $("price").textContent=P&&P.price>0?"Rp "+(P.price*qty).toLocaleString("id-ID"):"";
+  $("order").textContent=soon?"Kabari saya saat rilis":out?"Stok habis":"Pesan via WhatsApp";
+  $("order").disabled=out;$("order").style.opacity=out?".5":"";
+  $("orderNote").textContent=soon?"Koleksi ini belum rilis. Pilih warna dan ukuran minatmu, kami kabari lewat chat.":out?"Warna dan ukuran ini sedang habis. Coba pilihan lain.":"Pesan siap kirim akan dibuat otomatis. Harga dan pembayaran dikonfirmasi admin."}
+function pick(i){P=PS[i]||null;ci=0;if(P&&P.colors&&P.colors.length)COL=P.colors.map(c=>[c.name,c.hex,c.fg,c.fg]);swatches();draw();side(0);
+  [...$("prods").children].forEach((b,k)=>b.setAttribute("aria-pressed",k===i));refresh()}
+function showCol(c){CUR=c;$("vn").textContent=c.title;[...$("vols").children].forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===c.id));
+  if(unsubP)unsubP();
+  unsubP=onSnapshot(query(collection(db,"products"),where("collectionId","==",c.id),where("active","==",true)),sn=>{
+    PS=sn.docs.map(d=>({id:d.id,...d.data()}));$("prods").innerHTML="";
+    if(PS.length>1)PS.forEach((p,k)=>{const b=document.createElement("button");b.textContent=p.name;b.onclick=()=>pick(k);$("prods").appendChild(b)});
+    pick(0)})}
+if(db)onSnapshot(query(collection(db,"collections"),where("status","in",["segera","rilis"])),sn=>{
+  CS=sn.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order||0)-(b.order||0));$("vols").innerHTML="";
+  CS.forEach(c=>{const b=document.createElement("button");b.dataset.id=c.id;b.textContent=c.title+(c.status==="segera"?" · segera":"");b.onclick=()=>showCol(c);$("vols").appendChild(b)});
+  if(CS.length)showCol(CS.find(c=>CUR&&c.id===CUR.id)||CS.find(c=>c.status==="rilis")||CS[0]);else $("vn").textContent="segera"},
+  ()=>{$("orderNote").textContent="Data koleksi belum bisa dimuat. Coba muat ulang halaman."});
+["minus","plus"].forEach(i=>$(i).addEventListener("click",refresh));
+if(!db)$("orderNote").textContent="Data koleksi belum bisa dimuat. Muat ulang halaman atau coba lagi nanti.";
+/* ===== ukuran + pesan ===== */
+const SZ={S:[69,50],M:[71,52],L:[73,54],XL:[75,56]};let size="M",qty=1;
+const sB=[...$("sizes").children];
+function setSize(s){size=s;sB.forEach(x=>x.setAttribute("aria-pressed",x.textContent===s));$("len").textContent=SZ[s][0];$("wid").textContent=SZ[s][1];refresh()}
+sB.forEach(b=>b.onclick=()=>setSize(b.textContent));
+$("mine").oninput=e=>{const v=parseFloat(e.target.value);if(!v){$("hint").textContent="";return}
+  let best="S",d=1e9;for(const k in SZ){const x=Math.abs(SZ[k][1]-v);if(x<d){d=x;best=k}}
+  setSize(best);$("hint").textContent=d===0?`Pas di ukuran ${best}.`:`Terdekat: ${best} (selisih ${d} cm).`};
+function fit(){const h=+$("tb").value,w=+$("bb").value;if(!h||!w)return;
+  const L=["S","M","L","XL"];let i=w<58?0:w<70?1:w<82?2:3;if(h>178&&i<3)i++;if(h<160&&i>0)i--;
+  setSize(L[i]);$("hint").textContent=`Saran: ukuran ${L[i]}. Suka longgar? Naik satu ukuran.`}
+$("tb").oninput=fit;$("bb").oninput=fit;
+$("minus").onclick=()=>{qty=Math.max(1,qty-1);$("qty").textContent=qty};
+$("plus").onclick=()=>{qty=Math.min(maxq(),qty+1);$("qty").textContent=qty};
+$("order").onclick=()=>{
+  const soon=CUR&&CUR.status==="segera",title=CUR?CUR.title:"Vol.1";
+  const msg=(soon?`Halo VTEEN.CLUB, kabari saya saat kaos ${title} rilis.\n`:`Halo VTEEN.CLUB, saya mau pesan kaos ${title}${P?" ("+P.name+")":""}.\n`)+`Nama: ${$("name").value.trim()||"(isi nama)"}\nWarna: ${COL[ci][0]}\nUkuran: ${size}\nJumlah: ${qty}`;
+  if(!soon&&P)addDoc(collection(db,"orders"),{productId:P.id,productName:P.name,collectionTitle:title,name:$("name").value.trim().slice(0,60),color:COL[ci][0],size,qty,status:"baru",createdAt:serverTimestamp()}).catch(()=>{});
+  if(CONFIG.wa){open(`https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`,"_blank");return}
+  (navigator.clipboard?navigator.clipboard.writeText(msg):Promise.reject()).then(()=>$("orderNote").textContent="Pesan disalin. Tempel di DM Instagram yang terbuka.",()=>$("orderNote").textContent="Salin lalu kirim di DM: "+msg.replace(/\n/g," | ")).finally(()=>open(CONFIG.ig,"_blank"));
+};
+ 
+/* ===== pace ===== */
+const fmt=t=>{t=Math.round(t);const h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;return (h?h+":"+String(m).padStart(2,"0"):m)+":"+String(s).padStart(2,"0")};
+[[5,"5K"],[10,"10K"],[21.0975,"Half"],[42.195,"Marathon"]].forEach(([d,l])=>{const b=document.createElement("button");b.textContent=l;b.dataset.d=d;b.onclick=()=>{$("km").value=d;calc()};$("dc").appendChild(b)});
+function calc(){const km=parseFloat($("km").value),T=(+$("h").value||0)*3600+(+$("m").value||0)*60+(+$("s").value||0);
+  [...$("dc").children].forEach(b=>b.setAttribute("aria-pressed",Math.abs(+b.dataset.d-km)<.01));
+  if(!(km>0)||!(T>0)){["pace","spd","p5","p10","p21","p42"].forEach(i=>$(i).textContent="–");return}
+  $("pace").textContent=fmt(T/km);$("spd").textContent=(km/(T/3600)).toFixed(1);
+  [["p5",5],["p10",10],["p21",21.0975],["p42",42.195]].forEach(([i,d])=>$(i).textContent=fmt(T*Math.pow(d/km,1.06)))}
+["km","h","m","s"].forEach(i=>$(i).oninput=calc);calc();
+</script>
+</body>
+</html>
+ 
